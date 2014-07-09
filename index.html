@@ -218,7 +218,7 @@ function searchAndMakePlaylist ()
 				return Promise.resolve()
 			}}, function(error){
 				console.log(error)
-				$("#status").text("No songs found with these search terms.")
+				$("#status").text("No songs found with these search terms. Try again please.")
 				return Promise.reject()
 			}).then(function(){
 				//console.log('love')
