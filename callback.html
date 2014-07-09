@@ -111,7 +111,10 @@ function pageLoad()
   addTracksToPlaylist(playlist_name,track_ids).then(function(result)
   {
     $('#status').text("Playlist saved to your profile")
-    setTimeout(function(){close();}, 2000)
+    setTimeout(function(){
+      console.log('here')
+      window.close();
+    }, 2000)
   })
 }
 </script>
