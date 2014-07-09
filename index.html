@@ -219,6 +219,7 @@ function searchAndMakePlaylist ()
 			}}, function(error){
 				console.log(error)
 				$("#status").text("No songs found with these search terms.")
+				return Promise.reject()
 			}).then(function(){
 				//console.log('love')
 				//document.getElementById("SpotifySave").disabled = false
