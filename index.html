@@ -47,7 +47,6 @@
 <!-- <svg class="chart"></svg> -->
 <!-- <script src="http://jpillora.com/xdomain/dist/0.6/xdomain.min.js" master="localhost:8888"></script> -->
 <script src="jquery-1.11.1.min.js"></script>
-<script src="jsonp.js"></script>
 
 <script>
   // $.jsonp({
@@ -135,13 +134,14 @@ function makePlaylistWithWords(seed_URI)
 				//return
 				if (seed_track_ids == 0)
 				{
-					$("#status").text("No songs found with these search terms.")
+					//$("#status").text("No songs found with these search terms.")
 					reject("No playlist")
 				}
-				$("#status").text("Making spotify playlist") 
+				 
 				Promise.all(seed_track_ids.map(getJSONTrackRelated))
 				.then(function(values){
 					//console.log(values)
+					$("#status").text("Making spotify playlist")
 					values.forEach(function(result){
 						if (result.message.header.status_code == 200)
 						{
@@ -212,7 +212,10 @@ function searchAndMakePlaylist ()
 				have_valid_playlist = true
 				
 				return Promise.resolve()
-			}}, function(error){console.log(error)}).then(function(){
+			}}, function(error){
+				console.log(error)
+				$("#status").text("No songs found with these search terms.")
+			}).then(function(){
 				//console.log('love')
 				//document.getElementById("SpotifySave").disabled = false
 				document.getElementById("SpotifySave").style.display = "inline"
