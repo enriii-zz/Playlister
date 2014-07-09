@@ -135,36 +135,39 @@ function makePlaylistWithWords(seed_URI)
 				if (seed_track_ids == 0)
 				{
 					//$("#status").text("No songs found with these search terms.")
-					reject("No playlist")
+					reject(Error("No playlist"))
 				}
 				//$("#status").text("Making spotify playlist") // misplaced message but saves the trouble of writing a proper progress bar 
-				Promise.all(seed_track_ids.map(getJSONTrackRelated))
-				.then(function(values){
-					//console.log(values)
-					//$("#status").text("Making spotify playlist")
-					values.forEach(function(result){
-						if (result.message.header.status_code == 200)
-						{
-							related_track_list =  result.message.body
-							//console.log(related_track_list)
-							var j = 1
-							for (var idx = 0; idx<related_track_list.length ; idx++) 
+				else
+				{ 
+					Promise.all(seed_track_ids.map(getJSONTrackRelated))
+					.then(function(values){
+						//console.log(values)
+						//$("#status").text("Making spotify playlist")
+						values.forEach(function(result){
+							if (result.message.header.status_code == 200)
 							{
-								if (related_track_list[idx].track.track_spotify_id != "")
+								related_track_list =  result.message.body
+								//console.log(related_track_list)
+								var j = 1
+								for (var idx = 0; idx<related_track_list.length ; idx++) 
 								{
-									final_playlist_ids.push(related_track_list[idx].track.track_spotify_id);
-									j++;
-										//console.log(1)
-								}	
-								if(j>3) break;
-								//console.log(related_track_list[idx].track.track_spotify_id)
+									if (related_track_list[idx].track.track_spotify_id != "")
+									{
+										final_playlist_ids.push(related_track_list[idx].track.track_spotify_id);
+										j++;
+											//console.log(1)
+									}	
+									if(j>3) break;
+									//console.log(related_track_list[idx].track.track_spotify_id)
+								}
 							}
-						}
-					})
+						})
 
-				resolve(final_playlist_ids)
-				//return Promise.resolve(final_playlist_ids)
-				})
+					resolve(final_playlist_ids)
+					//return Promise.resolve(final_playlist_ids)
+					})
+				}
 			}
 			else
 			{
