@@ -137,7 +137,7 @@ function makePlaylistWithWords(seed_URI)
 					//$("#status").text("No songs found with these search terms.")
 					reject("No playlist")
 				}
-				 
+				$("#status").text("Making spotify playlist") // misplaced message but saves the trouble of writing a proper progress bar 
 				Promise.all(seed_track_ids.map(getJSONTrackRelated))
 				.then(function(values){
 					//console.log(values)
