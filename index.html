@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+/*.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}*/
+
+</style>
+
+<script src = "savePlaylist.js">
+</script>
+
+<!-- <body onload="doit()"> -->
+<body>
+<!-- 	<form name="form1" id = 'searchForm' method="get">
+		
+	</form>
+ -->	
+ 	<input type="search" id="mxmTrackSearch">
+	<input type="button" value="Make playlist" id = "makePlaylist">
+	<select id = "searchType" default>
+  		<option value="words">Lyrics/Words</option>
+  		<option value="track">Track-Artist</option>
+  		<option value="mxmId">MusixmatchID</option>
+
+<!--   		<option value="mercedes">Mercedes</option>
+  		<option value="audi">Audi</option>
+ -->	</select>
+ 	<p>
+			Max_query_terms: 1<input type="range" value="None" id="max_query_terms" name="max_query_terms" min="1" max="30" default = "10" > 30
+	</p>
+	<p >
+			Min_term_freq: 1<input type="range" value="None" id="min_term_freq" name="min_term_freq" min="1" max="30" default = "10">30
+	</p>
+	<p id = "status" style = "display:inline"></p>
+	<!-- <progress id = "ProgressBar" value="0" max="100" style = ""></progress> -->
+	<p id = "SpotifyWidget" > </p>
+	<p> <input type="button" value="Save This Playlist To Spotify" id = "SpotifySave" style = "display:none"> </p>
+</body>
+<!-- <svg class="chart"></svg> -->
+<!-- <script src="http://jpillora.com/xdomain/dist/0.6/xdomain.min.js" master="localhost:8888"></script> -->
+<script src="jquery-1.11.1.min.js"></script>
+<script src="jsonp.js"></script>
+
+<script>
+  // $.jsonp({
+  //   url: 'http://api.musixmatch.com/ws/1.1/track.search?apikey=b463ed1270b71853d56be5bd776a9b4a&q_lyrics=i%20love%20you', // any JSON endpoint
+  //   corsSupport: true, // if URL above supports CORS (optional)
+  //   jsonpSupport: true, // if URL above supports JSONP (optional)
+ 
+  //   success: function(data){
+  //     alert('CORS or JSONP! ' + data.awesome);
+  //   }
+  //   // error, etc.
+  // });
+</script>
+
+
+<script>
+searchQuery = document.getElementById('mxmTrackSearch')	
+searchForm = document.getElementById('searchForm')
+searchType = document.getElementById('searchType')
+min_term_freq = document.getElementById('min_term_freq')
+max_query_terms = document.getElementById('max_query_terms')
+SpotifySave = document.getElementById('SpotifySave')
+MakePlaylist = document.getElementById('makePlaylist')
+var mxmAPI_base = 'https://api.musixmatch.com/ws/1.1/'
+var apiKey = 'b463ed1270b71853d56be5bd776a9b4a'
+	
+var spotify_auth_base = 'https://accounts.spotify.com/authorize'
+var spotify_client_ID = '14fb55b1df36454793caa07ab8abefe6'
+var spotify_client_secret = 'cf72548f86e8493d8aa38cc881a63ee4'
+
+var have_valid_playlist = false
+
+function getJSON(url) 
+{
+	var get_promise = $.getJSON(url);
+	return get_promise.then(JSON.stringify).then(JSON.parse);
+}
+
+function getJSONTrackRelated(track_id) 
+{
+	var url = mxmAPI_base + 'track.related.get?apikey=' + apiKey +'&page_size=100&g_commontrack=1&max_query_terms'+ max_query_terms.value + '&min_term_freq=' + min_term_freq.value + '&track_id=' + track_id +'&format=jsonp&callback=?'
+	var url = encodeURI(url)
+	var get_promise = $.getJSON(url);
+	return get_promise.then(JSON.stringify).then(JSON.parse);
+		//console.log(url)
+		//return getJSON(url);
+}
+
+function makePlaylistWithWords(seed_URI)
+{
+	final_playlist_ids = new Array()
+	seed_track_ids = new Array()
+	return new Promise(function(resolve,reject)
+	{
+		getJSON(seed_URI).then(function(response){
+		//console.log(123)
+		//console.log(response)
+			if (response.message.header.status_code == 200)
+			{	
+				//console.log(3)
+				track_list = response.message.body.track_list
+				//console.log(response.message.body.track_list[0])
+				//seed_track_id = response.message.body.track_list[0].track.track_id
+				seed_tracks_length = (track_list.length <= 7) ? track_list.length:7
+				//console.log(seed_tracks_length)
+				var j =1
+				for (var i = 0;i<track_list.length ; i++) 
+				{
+					//console.log(i)
+					if (track_list[i].track.track_spotify_id != "")
+					{
+						seed_track_ids.push(track_list[i].track.track_id)
+						final_playlist_ids.push(track_list[i].track.track_spotify_id)
+						j++
+					}
+					if(j>seed_tracks_length) break;
+					
+					//console.log(final_playlist_ids) 
+				};
+				//console.log(seed_track_ids)
+				//console.log(final_playlist_ids)
+
+				//return
+				$("#status").text("Making spotify playlist") 
+				Promise.all(seed_track_ids.map(getJSONTrackRelated))
+				.then(function(values){
+					//console.log(values)
+					values.forEach(function(result){
+						if (result.message.header.status_code == 200)
+						{
+							related_track_list =  result.message.body
+							//console.log(related_track_list)
+							var j = 1
+							for (var idx = 0; idx<related_track_list.length ; idx++) 
+							{
+								if (related_track_list[idx].track.track_spotify_id != "")
+								{
+									final_playlist_ids.push(related_track_list[idx].track.track_spotify_id);
+									j++;
+										//console.log(1)
+								}	
+								if(j>3) break;
+								//console.log(related_track_list[idx].track.track_spotify_id)
+							}
+						}
+					})
+
+				resolve(final_playlist_ids)
+				//return Promise.resolve(final_playlist_ids)
+				})
+			}
+			else
+			{
+				reject(Error(response.message))
+
+			}
+		})
+	})		
+}
+	
+	
+
+function searchAndMakePlaylist () 
+{
+	words = searchQuery.value.split(" ")
+	playlist_name = 'Musixmatch - ' + words[0].capitalizeFirstLetter() //+ words[1]
+	if (searchType.value == 'words')
+	{
+		var seed_query = mxmAPI_base + 'track.search?apikey=' + apiKey + '&q_lyrics=' + searchQuery.value + '&g_commontrack=1'+'&f_has_lyrics=1&page_size=100' + '&format=jsonp&callback=?'
+		var seed_queryURI = encodeURI(seed_query)
+		document.getElementById("SpotifyWidget").style.visibility = "hidden"
+		document.getElementById("SpotifySave").style.display = "none"
+		$("#status").text("Searching Musixmatch db for songs with those words")
+								
+		makePlaylistWithWords(seed_queryURI)
+		.then(function(track_ids){
+			console.log(track_ids)
+				
+			localStorage.setItem('track_ids', JSON.stringify(track_ids));
+			localStorage.setItem('playlist-name', playlist_name);
+			//console.log('123')
+			//localStorage.setItem('createplaylist-artist', curArtist['@name']);
+			if(track_ids.length > 0)
+			{
+				// <iframe src="https://embed.spotify.com/?uri=spotify:trackset:PREFEREDTITLE:5Z7ygHQo02SUrFmcgpwsKW,1x6ACsKV4UdWS2FMuPFUiT,4bi73jCM02fMpkI11Lqmfe" frameborder="0" allowtransparency="true"></iframe>
+									
+				var src = "https://embed.spotify.com/?uri=spotify:trackset:"+playlist_name+':'+ track_ids.toString()
+				console.log(src)
+				$("#status").text("Done!")
+				document.getElementById("SpotifyWidget").style.visibility = "visible" 
+				document.getElementById("SpotifyWidget").innerHTML += '<iframe id = "SpotifyWidgetFrame" frameborder="0" allowtransparency="true" width="557" height="637" style = "display:inline"></iframe>'
+				document.getElementById("SpotifyWidgetFrame").src = src
+				
+				have_valid_playlist = true
+				
+				return Promise.resolve()
+			}}).then(function(){
+				//console.log('love')
+				//document.getElementById("SpotifySave").disabled = false
+				document.getElementById("SpotifySave").style.display = "inline"
+
+			})
+									//console.log(final_playlist_ids)
+	}
+
+	if (searchType.value == 'track')
+	{
+		var seed_query = mxmAPI_base + 'matcher.track.get?apikey=' + apiKey + '&q_track=' + searchQuery.value + '&f_has_lyrics=1' + '&format=jsonp&callback=?'
+		var seed_queryURI = encodeURI(seed_query)
+		console.log(seed_queryURI)
+		$.getJSON(seed_queryURI, function(result){
+			//console.log(123)
+			var jsonString = JSON.stringify(result);
+			var response = JSON.parse(jsonString);
+			console.log(response); 
+		})
+	}
+
+	if (searchType.value == 'mxmId')
+	{
+		var seed_query = mxmAPI_base + 'track.get?apikey=' + apiKey + '&track_id=' + searchQuery.value + '&format=jsonp&callback=?' 
+		var seed_queryURI = encodeURI(seed_query)
+		console.log(seed_queryURI)
+		$.getJSON(seed_queryURI, function(result){
+		//console.log(123)
+		var jsonString = JSON.stringify(result);
+		var response = JSON.parse(jsonString);
+		console.log(response); 
+		})
+	}
+	return false
+}
+
+$("#mxmTrackSearch").keyup(function(event) 
+{
+    if (event.keyCode == 13) {
+        searchAndMakePlaylist();
+    }
+});
+
+// searchForm.onsubmit = function(e){
+// 	searchAndMakePlaylist()
+// }
+
+MakePlaylist.onclick = function(e){
+	searchAndMakePlaylist()
+}
+
+SpotifySave.onclick = function(e){
+  loginWithSpotify()
+}
+
+
+</script>
