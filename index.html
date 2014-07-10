@@ -116,7 +116,7 @@ function checkRepetition(track_list, track)
 	})
 }
 
-function makePlaylistWithWords(seed_URI)
+function makePlaylist(seed_URI, search_with_words) //enter URI which has tracklist to build playlist of related tracks. search_with_words is a flag to accomodate different kind of JSON response structure fetched from the seed_URI
 {
 	final_playlist_ids = new Array()
 	final_playlist_tracks = new Array()
@@ -131,12 +131,16 @@ function makePlaylistWithWords(seed_URI)
 			if (response.message.header.status_code == 200)
 			{	
 				//console.log(3)
-				try{
+				if(search_with_words)
+				{	
 					track_list = response.message.body.track_list
 				}
-				catch(err){
-					track_list = response.message.body
+
+				if(!search_with_words)
+				{
+					track_list = response.message.body	
 				}
+				
 				//console.log(response.message.body.track_list[0])
 				//seed_track_id = response.message.body.track_list[0].track.track_id
 				console.log(seed_URI)
@@ -235,7 +239,7 @@ function searchAndMakePlaylist ()
 		document.getElementById("SpotifySave").style.display = "none"
 		$("#status").text("Searching Musixmatch db for songs with those words")
 								
-		makePlaylistWithWords(seed_queryURI)
+		makePlaylist(seed_queryURI, true)
 		.then(function(track_ids){
 			console.log(track_ids)
 				
@@ -290,7 +294,7 @@ function searchAndMakePlaylist ()
 			}
 		})
 		.then(function(url){
-			makePlaylistWithWords(url)
+			makePlaylist(url, false)
 			.then(function(track_ids){
 				console.log(track_ids)
 				localStorage.setItem('track_ids', JSON.stringify(track_ids));
