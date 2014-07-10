@@ -270,10 +270,13 @@ function searchAndMakePlaylist ()
 		var seed_queryURI = encodeURI(seed_query)
 		console.log(seed_queryURI)
 
-		// document.getElementById("SpotifyWidget").style.visibility = "hidden"
-		// document.getElementById("SpotifySave").style.display = "none"
-		// $("#status").text("Searching Musixmatch db for songs with those words")
-								
+		document.getElementById("SpotifyWidget").style.visibility = "hidden"
+		document.getElementById("SpotifySave").style.display = "none"
+		$("#status").text("Searching Musixmatch db for songs with those words")
+		
+		getJSON(url).then(function(response){
+			console.log(response.message.body.track)
+		})
 		// makePlaylistWithWords(seed_queryURI)
 		// .then(function(track_ids){
 		// 	console.log(track_ids)
