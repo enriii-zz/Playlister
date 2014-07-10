@@ -134,6 +134,7 @@ function makePlaylistWithWords(seed_URI)
 				track_list = response.message.body.track_list
 				//console.log(response.message.body.track_list[0])
 				//seed_track_id = response.message.body.track_list[0].track.track_id
+				console.log(seed_URI)
 				seed_tracks_length = (track_list.length <= 9) ? track_list.length:9 //number of seed tracks to use
 				//console.log(seed_tracks_length)
 				var j =1
