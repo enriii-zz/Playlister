@@ -224,7 +224,22 @@ function makePlaylist(seed_URI, search_with_words) //enter URI which has trackli
 	})		
 }
 	
-	
+function makeURI(response)
+{
+	//console.log(response.message.body.track)
+	return new Promise(function(resolve, reject){
+		if (response.message.header.status_code == 200) 
+		{
+			console.log(response.message.body.track.track_id)
+			var url = mxmAPI_base + 'track.related.get?apikey=' + apiKey +'&page_size=100&g_commontrack=1&max_query_terms'+ max_query_terms.value + '&min_term_freq=' + min_term_freq.value + '&track_id=' + response.message.body.track.track_id +'&format=jsonp&callback=?'
+			resolve (url)
+		}
+		else
+		{
+			reject (Error("No tracks found with this query. Try again please."))
+		}	
+	})
+}			
 
 function searchAndMakePlaylist () 
 {
@@ -284,19 +299,7 @@ function searchAndMakePlaylist ()
 		document.getElementById("SpotifySave").style.display = "none"
 		$("#status").text("Searching Musixmatch db for songs with those words")
 		
-		getJSON(seed_queryURI).then(function(response){
-			//console.log(response.message.body.track)
-			if (response.message.header.status_code == 200) 
-			{
-				console.log(response.message.body.track.track_id)
-				var url = mxmAPI_base + 'track.related.get?apikey=' + apiKey +'&page_size=100&g_commontrack=1&max_query_terms'+ max_query_terms.value + '&min_term_freq=' + min_term_freq.value + '&track_id=' + response.message.body.track.track_id +'&format=jsonp&callback=?'
-				return (url)
-			}
-			else
-			{
-				return (Error("No tracks found with this query. Try again please."))
-			}
-		})
+		getJSON(seed_queryURI).then(makeURI)
 		.then(function(url){
 			makePlaylist(url, false)
 			.then(function(track_ids){
@@ -319,7 +322,7 @@ function searchAndMakePlaylist ()
 					have_valid_playlist = true
 				
 					return Promise.resolve()
-				}}).catch( function(error){
+				}}, function(error){
 					console.log(error)
 					$("#status").text("No tracks found with this query. Try again please.")
 					return Promise.reject()
