@@ -26,8 +26,8 @@
  	<input type="search" id="mxmTrackSearch">
 	
 	<select id = "searchType" default>
-  		<option value="words">Word based playlist</option>
-  		<option value="track" disabled>Track-Artist based playlist</option>
+  		<option value="words">'Word' based playlist</option>
+  		<option value="track">'Track-Artist' based playlist</option>
   		<option value="mxmId" disabled>MusixmatchID</option>
 
 <!--   		<option value="mercedes">Mercedes</option>
@@ -37,16 +37,16 @@
  	<br>
 	<br>
 
- 	<p style = "display:none">
+ 	<div style = "display:none">
 			Similarity to query: less<input type="range" value="None" id="max_query_terms" name="max_query_terms" min="1" max="30" default = "6" >more
-	</p>
-	<p style = "display:none">
+	</div>
+	<div style = "display:none">
 			Number of tracks to : more<input type="range" value="None" id="min_term_freq" name="min_term_freq" min="1" max="30" default = "8" >less
-	</p>
-	<p id = "status" style = "display:inline"></p>
+	</div>
+	<div id = "status" style = "display:inline"></div>
 	<!-- <progress id = "ProgressBar" value="0" max="100" style = ""></progress> -->
-	<p id = "SpotifyWidget" > </p>
-	<p> <input type="button" value="Save This Playlist To Spotify" id = "SpotifySave" style = "display:none"> </p>
+	<div id = "SpotifyWidget" > </div>
+	<div> <input type="button" value="Save This Playlist To Spotify" id = "SpotifySave" style = "display:none"> </div>
 </body>
 <!-- <svg class="chart"></svg> -->
 <!-- <script src="http://jpillora.com/xdomain/dist/0.6/xdomain.min.js" master="localhost:8888"></script> -->
@@ -269,12 +269,43 @@ function searchAndMakePlaylist ()
 		var seed_query = mxmAPI_base + 'matcher.track.get?apikey=' + apiKey + '&q_track=' + searchQuery.value + '&f_has_lyrics=1' + '&format=jsonp&callback=?'
 		var seed_queryURI = encodeURI(seed_query)
 		console.log(seed_queryURI)
-		$.getJSON(seed_queryURI, function(result){
-			//console.log(123)
-			var jsonString = JSON.stringify(result);
-			var response = JSON.parse(jsonString);
-			console.log(response); 
-		})
+
+		// document.getElementById("SpotifyWidget").style.visibility = "hidden"
+		// document.getElementById("SpotifySave").style.display = "none"
+		// $("#status").text("Searching Musixmatch db for songs with those words")
+								
+		// makePlaylistWithWords(seed_queryURI)
+		// .then(function(track_ids){
+		// 	console.log(track_ids)
+		// 	localStorage.setItem('track_ids', JSON.stringify(track_ids));
+		// 	localStorage.setItem('playlist-name', playlist_name);
+		// 	//console.log('123')
+		// 	//localStorage.setItem('createplaylist-artist', curArtist['@name']);
+		// 	if(track_ids.length > 0)
+		// 	{
+		// 		// <iframe src="https://embed.spotify.com/?uri=spotify:trackset:PREFEREDTITLE:5Z7ygHQo02SUrFmcgpwsKW,1x6ACsKV4UdWS2FMuPFUiT,4bi73jCM02fMpkI11Lqmfe" frameborder="0" allowtransparency="true"></iframe>
+									
+		// 		var src = "https://embed.spotify.com/?uri=spotify:trackset:"+playlist_name+':'+ track_ids.toString()
+		// 		console.log(src)
+		// 		$("#status").text("Done!")
+		// 		document.getElementById("SpotifyWidget").style.visibility = "visible" 
+		// 		document.getElementById("SpotifyWidget").innerHTML += '<iframe id = "SpotifyWidgetFrame" frameborder="0" allowtransparency="true" width="557" height="637" style = "display:inline"></iframe>'
+		// 		document.getElementById("SpotifyWidgetFrame").src = src
+				
+		// 		have_valid_playlist = true
+				
+		// 		return Promise.resolve()
+		// 	}}, function(error){
+		// 		console.log(error)
+		// 		$("#status").text("No songs found with these search terms. Try again please.")
+		// 		return Promise.reject()
+		// 	}).then(function(){
+		// 		//console.log('love')
+		// 		//document.getElementById("SpotifySave").disabled = false
+		// 		document.getElementById("SpotifySave").style.display = "inline"
+
+		// 	})
+
 	}
 
 	if (searchType.value == 'mxmId')
