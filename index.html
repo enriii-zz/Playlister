@@ -131,7 +131,12 @@ function makePlaylistWithWords(seed_URI)
 			if (response.message.header.status_code == 200)
 			{	
 				//console.log(3)
-				track_list = response.message.body.track_list
+				try{
+					track_list = response.message.body.track_list
+				}
+				catch(err){
+					track_list = response.message.body
+				}
 				//console.log(response.message.body.track_list[0])
 				//seed_track_id = response.message.body.track_list[0].track.track_id
 				console.log(seed_URI)
