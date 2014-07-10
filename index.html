@@ -274,7 +274,7 @@ function searchAndMakePlaylist ()
 		document.getElementById("SpotifySave").style.display = "none"
 		$("#status").text("Searching Musixmatch db for songs with those words")
 		
-		getJSON(url).then(function(response){
+		getJSON(seed_queryURI).then(function(response){
 			console.log(response.message.body.track)
 		})
 		// makePlaylistWithWords(seed_queryURI)
