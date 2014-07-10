@@ -283,36 +283,38 @@ function searchAndMakePlaylist ()
 				return url
 			}
 		})
-		.then(makePlaylistWithWords)
-		.then(function(track_ids){
-			console.log(track_ids)
-			localStorage.setItem('track_ids', JSON.stringify(track_ids));
-			localStorage.setItem('playlist-name', playlist_name);
-			//console.log('123')
-			//localStorage.setItem('createplaylist-artist', curArtist['@name']);
-			if(track_ids.length > 0)
-			{
-				// <iframe src="https://embed.spotify.com/?uri=spotify:trackset:PREFEREDTITLE:5Z7ygHQo02SUrFmcgpwsKW,1x6ACsKV4UdWS2FMuPFUiT,4bi73jCM02fMpkI11Lqmfe" frameborder="0" allowtransparency="true"></iframe>
+		.then(function(url){
+			makePlaylistWithWords(url)
+			.then(function(track_ids){
+				console.log(track_ids)
+				localStorage.setItem('track_ids', JSON.stringify(track_ids));
+				localStorage.setItem('playlist-name', playlist_name);
+				//console.log('123')
+				//localStorage.setItem('createplaylist-artist', curArtist['@name']);
+				if(track_ids.length > 0)
+				{
+					// <iframe src="https://embed.spotify.com/?uri=spotify:trackset:PREFEREDTITLE:5Z7ygHQo02SUrFmcgpwsKW,1x6ACsKV4UdWS2FMuPFUiT,4bi73jCM02fMpkI11Lqmfe" frameborder="0" allowtransparency="true"></iframe>
 									
-				var src = "https://embed.spotify.com/?uri=spotify:trackset:"+playlist_name+':'+ track_ids.toString()
-				console.log(src)
-				$("#status").text("Done!")
-				document.getElementById("SpotifyWidget").style.visibility = "visible" 
-				document.getElementById("SpotifyWidget").innerHTML += '<iframe id = "SpotifyWidgetFrame" frameborder="0" allowtransparency="true" width="557" height="637" style = "display:inline"></iframe>'
-				document.getElementById("SpotifyWidgetFrame").src = src
+					var src = "https://embed.spotify.com/?uri=spotify:trackset:"+playlist_name+':'+ track_ids.toString()
+					console.log(src)
+					$("#status").text("Done!")
+					document.getElementById("SpotifyWidget").style.visibility = "visible" 
+					document.getElementById("SpotifyWidget").innerHTML += '<iframe id = "SpotifyWidgetFrame" frameborder="0" allowtransparency="true" width="557" height="637" style = "display:inline"></iframe>'
+					document.getElementById("SpotifyWidgetFrame").src = src
 				
-				have_valid_playlist = true
+					have_valid_playlist = true
 				
-				return Promise.resolve()
-			}}, function(error){
-				console.log(error)
-				$("#status").text("No songs found with these search terms. Try again please.")
-				return Promise.reject()
-			}).then(function(){
-				//console.log('love')
-				//document.getElementById("SpotifySave").disabled = false
-				document.getElementById("SpotifySave").style.display = "inline"
+					return Promise.resolve()
+				}}, function(error){
+					console.log(error)
+					$("#status").text("No songs found with these search terms. Try again please.")
+					return Promise.reject()
+				}).then(function(){
+					//console.log('love')
+					//document.getElementById("SpotifySave").disabled = false
+					document.getElementById("SpotifySave").style.display = "inline"
 
+				})
 			})
 
 	}
