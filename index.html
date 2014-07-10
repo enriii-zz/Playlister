@@ -294,7 +294,7 @@ function searchAndMakePlaylist ()
 			}
 			else
 			{
-				return Promise.reject("No tracks found with this query")
+				return reject("No tracks found with this query")
 			}
 		})
 		.then(function(url){
