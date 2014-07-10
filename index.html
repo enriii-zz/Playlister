@@ -327,17 +327,18 @@ function searchAndMakePlaylist ()
 						$("#status").text("No tracks found with this query. Try again please.")
 						return Promise.reject()
 					})
+					.then(function(){
+						//console.log('love')
+						//document.getElementById("SpotifySave").disabled = false
+						document.getElementById("SpotifySave").style.display = "inline"
+					})
+
 			}, function(error){
 				console.log(error)
 				$("#status").text("No tracks found with this query. Try again please.")
 				return Promise.reject()
-				
+
 			})
-		})
-		.then(function(){
-			//console.log('love')
-			//document.getElementById("SpotifySave").disabled = false
-			document.getElementById("SpotifySave").style.display = "inline"
 		})
 				
 			
