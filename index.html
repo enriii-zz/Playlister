@@ -97,10 +97,28 @@ function getJSONTrackRelated(track_id)
 		//return getJSON(url);
 }
 
+function checkRepetition(track_list, track)
+{
+	return track_list.some(function(current_track)
+	{
+		if (current_track.artist_name == track.artist_name)
+		{
+			if (current_track.track_name == track.track_name) 
+			{
+				return true
+			}
+		}
+		//return false
+	})
+}
+
 function makePlaylistWithWords(seed_URI)
 {
 	final_playlist_ids = new Array()
+	final_playlist_tracks = new Array()
 	seed_track_ids = new Array()
+	var repeatFlag = false
+
 	return new Promise(function(resolve,reject)
 	{
 		getJSON(seed_URI).then(function(response){
@@ -120,10 +138,17 @@ function makePlaylistWithWords(seed_URI)
 					//console.log(i)
 					if (track_list[i].track.track_spotify_id != "")
 					{
-						seed_track_ids.push(track_list[i].track.track_id)
-						final_playlist_ids.push(track_list[i].track.track_spotify_id)
-						j++
+						repeatFlag = checkRepetition(final_playlist_tracks, track_list[i].track)
+						console.log(repeatFlag)
+						if (repeatFlag == false)
+						{
+							seed_track_ids.push(track_list[i].track.track_id)
+							final_playlist_ids.push(track_list[i].track.track_spotify_id)
+							final_playlist_tracks.push(track_list[i].track)
+							j++
+						}
 					}
+
 					if(j>seed_tracks_length) break;
 					
 					//console.log(final_playlist_ids) 
@@ -155,8 +180,14 @@ function makePlaylistWithWords(seed_URI)
 								{
 									if (related_track_list[idx].track.track_spotify_id != "")
 									{
-										final_playlist_ids.push(related_track_list[idx].track.track_spotify_id);
-										j++;
+										repeatFlag = checkRepetition(final_playlist_tracks, related_track_list[idx].track)
+										console.log(repeatFlag)
+										if (repeatFlag == false)
+										{
+											final_playlist_ids.push(related_track_list[idx].track.track_spotify_id);
+											final_playlist_tracks.push(related_track_list[idx].track)
+											j++;
+										}
 											//console.log(1)
 									}	
 									if(j>3) break;
