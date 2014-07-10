@@ -319,7 +319,7 @@ function searchAndMakePlaylist ()
 					have_valid_playlist = true
 				
 					return Promise.resolve()
-				}}, function(error){
+				}}).catch( function(error){
 					console.log(error)
 					$("#status").text("No tracks found with this query. Try again please.")
 					return Promise.reject()
