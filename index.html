@@ -32,7 +32,14 @@
 
 <!--   		<option value="mercedes">Mercedes</option>
   		<option value="audi">Audi</option>
- -->	</select>
+ --></select>
+ 	<div id = "playlistTypeContainer" style = "display:none">
+ 		<select id = "playlistType" default>
+  			<option value="covers">Playlist of covers</option>
+  			<option value="track">Playlist of similar tracks</option>
+ 		</select>
+	</div>
+
  	<input type="button" value="Make playlist" id = "makePlaylist">
  	<br>
 	<br>
@@ -369,6 +376,14 @@ $("#mxmTrackSearch").keyup(function(event)
 
 $('#searchType').change(function() {
   console.log('The option with value ' + $(this).val() + ' and text ' + $(this).text() + ' was selected.');
+  if($(this).val() == 'track')
+  {
+  	$('playlistTypeContainer').style.display = "inline"
+  }
+  if($(this).val() == 'words')
+  {
+  	$('playlistTypeContainer').style.display = "none"
+  }
 });
 
 // searchForm.onsubmit = function(e){
