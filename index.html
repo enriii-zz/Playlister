@@ -35,7 +35,7 @@
  --></select>
  	<div id = "playlistTypeContainer" style = "display:none">
  		<select id = "playlistType" >
-  			<option value="covers" >Playlist of covers</option>
+  			<option value="covers">Playlist of covers</option>
   			<option value="uniques">Playlist of unique tracks</option>
  		</select>
 	</div>
@@ -396,12 +396,14 @@ $('#playlistType').change(function(){
 	console.log('The option with value ' + $(this).val() + ' and text ' + $(this).text() + ' was selected.');
 	if ($(this).val() == 'covers')
 		{
+			//console.log(1)
 			min_term_freq.value = 2 
 			max_query_terms.value = 20
 		}
 
-	if ($(this).val() == 'unique')
+	if ($(this).val() == 'uniques')
 		{
+			//console.log(2)
 			min_term_freq.value = 8 
 			max_query_terms.value = 8
 		}	
