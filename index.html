@@ -239,7 +239,7 @@ function makeURI(response)
 		if (response.message.header.status_code == 200) 
 		{
 			console.log(response.message.body.track.track_id)
-			var url = mxmAPI_base + 'track.related.get?apikey=' + apiKey +'&page_size=100&g_commontrack=1&max_query_terms'+ max_query_terms.value + '&min_term_freq=' + min_term_freq.value + '&track_id=' + response.message.body.track.track_id +'&format=jsonp&callback=?'
+			var url = mxmAPI_base + 'track.related.get?apikey=' + apiKey +'&page_size=100&g_commontrack=1&max_query_terms='+ max_query_terms.value + '&min_term_freq=' + min_term_freq.value + '&track_id=' + response.message.body.track.track_id +'&format=jsonp&callback=?'
 			resolve (url)
 		}
 		else
