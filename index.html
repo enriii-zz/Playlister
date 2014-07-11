@@ -36,7 +36,7 @@
  	<div id = "playlistTypeContainer" style = "display:none">
  		<select id = "playlistType" default>
   			<option value="covers">Playlist of covers</option>
-  			<option value="track">Playlist of similar tracks</option>
+  			<option value="unique">Playlist of unique tracks</option>
  		</select>
 	</div>
 
@@ -380,8 +380,16 @@ $('#searchType').change(function() {
   if($(this).val() == 'track')
   {
   	document.getElementById("playlistTypeContainer").style.display = "inline"
-  	min_term_freq.value = 2 
-  	max_query_terms.value = 20
+  	if (document.getElementById("playlistType").value = 'covers')
+  		{
+  			min_term_freq.value = 2 
+  			max_query_terms.value = 20
+  		}
+  	if (document.getElementById("playlistType").value = 'unique')
+  		{
+  			min_term_freq.value = 8 
+  			max_query_terms.value = 8
+  		}	
   }
   if($(this).val() == 'words')
   {
