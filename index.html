@@ -13,17 +13,25 @@
 }*/
 
 </style>
-
+<link rel="stylesheet" href="style.css">
 <script src = "savePlaylist.js">
 </script>
 
 <!-- <body onload="doit()"> -->
 <body>
+<header>
+	<div class="container">
+		<img src="http://musixmatch.com/img/mxm_logo_black.png" width="135" alt="Musixmatch" />
+		<a href="#">About the project</a>
+	</div>
+</header>
+<h1>Musixmatch playlister</h1>
+<h2>Create a Spotify playlist of songs with lyrics containing searched word/s or with lyrics similar to a track</h2>
 <!-- 	<form name="form1" id = 'searchForm' method="get">
 		
 	</form>
  -->	
- 	<input type="search" id="mxmTrackSearch">
+ 	<input type="search" id="mxmTrackSearch" placeholder="Insert word/s" />
 	
 	<select id = "searchType" default>
   		<option value="words" >Search with 'Words'</option>
