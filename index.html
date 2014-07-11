@@ -81,7 +81,7 @@ min_term_freq = document.getElementById('min_term_freq')
 max_query_terms = document.getElementById('max_query_terms')
 SpotifySave = document.getElementById('SpotifySave')
 MakePlaylist = document.getElementById('makePlaylist')
-playlistTypeContainer = document.getElementById('playlistTypeContainer')
+PlaylistTypeContainer = document.getElementById('playlistTypeContainer')
 var mxmAPI_base = 'https://api.musixmatch.com/ws/1.1/'
 var apiKey = 'b463ed1270b71853d56be5bd776a9b4a'
 	
@@ -379,11 +379,11 @@ $('#searchType').change(function() {
   console.log('The option with value ' + $(this).val() + ' and text ' + $(this).text() + ' was selected.');
   if($(this).val() == 'track')
   {
-  	$('#playlistTypeContainer').style.display = "inline"
+  	document.getElementById("PlaylistTypeContainer").style.display = "inline"
   }
   if($(this).val() == 'words')
   {
-  	$('#playlistTypeContainer').style.display = "none"
+  	document.getElementById("PlaylistTypeContainer").style.display = "inline"
   }
 });
 
