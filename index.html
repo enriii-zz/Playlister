@@ -367,6 +367,10 @@ $("#mxmTrackSearch").keyup(function(event)
     }
 });
 
+$('#searchType').change(function() {
+  console.log('The option with value ' + $(this).val() + ' and text ' + $(this).text() + ' was selected.');
+});
+
 // searchForm.onsubmit = function(e){
 // 	searchAndMakePlaylist()
 // }
