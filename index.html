@@ -26,7 +26,7 @@
  	<input type="search" id="mxmTrackSearch">
 	
 	<select id = "searchType" default>
-  		<option value="words" selected>Search with 'Words'</option>
+  		<option value="words" >Search with 'Words'</option>
   		<option value="track">Search with 'Track-Artist'</option>
   		<!-- <option value="mxmId" disabled>MusixmatchID</option> -->
 
@@ -34,8 +34,8 @@
   		<option value="audi">Audi</option>
  --></select>
  	<div id = "playlistTypeContainer" style = "display:none">
- 		<select id = "playlistType" default>
-  			<option value="covers" selected>Playlist of covers</option>
+ 		<select id = "playlistType" >
+  			<option value="covers" >Playlist of covers</option>
   			<option value="uniques">Playlist of unique tracks</option>
  		</select>
 	</div>
@@ -380,6 +380,9 @@ $('#searchType').change(function() {
   if($(this).val() == 'track')
   {
   	document.getElementById("playlistTypeContainer").style.display = "inline"
+  	min_term_freq.value = 2 
+  	max_query_terms.value = 20
+
   }
   if($(this).val() == 'words')
   {
@@ -390,13 +393,14 @@ $('#searchType').change(function() {
 });
 
 $('#playlistType').change(function(){
-	
-	if (document.getElementById("playlistType").value = 'covers')
+	//console.log('The option with value ' + $(this).val() + ' and text ' + $(this).text() + ' was selected.');
+	if ($(this).val() = 'covers')
 		{
 			min_term_freq.value = 2 
 			max_query_terms.value = 20
 		}
-	if (document.getElementById("playlistType").value = 'unique')
+
+	if ($(this).val() = 'unique')
 		{
 			min_term_freq.value = 8 
 			max_query_terms.value = 8
