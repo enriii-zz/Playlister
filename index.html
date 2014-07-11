@@ -278,7 +278,7 @@ function searchAndMakePlaylist ()
 				console.log(src)
 				$("#status").text("Done!")
 				document.getElementById("SpotifyWidget").style.visibility = "visible" 
-				document.getElementById("SpotifyWidget").innerHTML += '<iframe id = "SpotifyWidgetFrame" frameborder="0" allowtransparency="true" width="557" height="637" style = "display:inline"></iframe>'
+				document.getElementById("SpotifyWidget").innerHTML += '<iframe id = "SpotifyWidgetFrame" frameborder="0" allowtransparency="true" width="557" height="637" style = "display:block"></iframe>'
 				document.getElementById("SpotifyWidgetFrame").src = src
 				
 				have_valid_playlist = true
@@ -291,7 +291,7 @@ function searchAndMakePlaylist ()
 			}).then(function(){
 				//console.log('love')
 				//document.getElementById("SpotifySave").disabled = false
-				document.getElementById("SpotifySave").style.display = "inline"
+				document.getElementById("SpotifySave").style.display = "block"
 
 			})
 									//console.log(final_playlist_ids)
@@ -324,7 +324,7 @@ function searchAndMakePlaylist ()
 						console.log(src)
 						$("#status").text("Done!")
 						document.getElementById("SpotifyWidget").style.visibility = "visible" 
-						document.getElementById("SpotifyWidget").innerHTML += '<iframe id = "SpotifyWidgetFrame" frameborder="0" allowtransparency="true" width="557" height="637" style = "display:inline"></iframe>'
+						document.getElementById("SpotifyWidget").innerHTML += '<iframe id = "SpotifyWidgetFrame" frameborder="0" allowtransparency="true" width="557" height="637" style = "display:block"></iframe>'
 						document.getElementById("SpotifyWidgetFrame").src = src
 				
 						have_valid_playlist = true
@@ -338,7 +338,7 @@ function searchAndMakePlaylist ()
 					.then(function(){
 						//console.log('love')
 						//document.getElementById("SpotifySave").disabled = false
-						document.getElementById("SpotifySave").style.display = "inline"
+						document.getElementById("SpotifySave").style.display = "block"
 					})
 
 			}, function(error){
@@ -379,7 +379,7 @@ $('#searchType').change(function() {
   console.log('The option with value ' + $(this).val() + ' and text ' + $(this).text() + ' was selected.');
   if($(this).val() == 'track')
   {
-  	document.getElementById("playlistTypeContainer").style.display = "inline"
+  	document.getElementById("playlistTypeContainer").style.display = "block"
   	min_term_freq.value = 2 
   	max_query_terms.value = 20
 
