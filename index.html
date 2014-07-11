@@ -79,7 +79,7 @@ searchForm = document.getElementById('searchForm')
 searchType = document.getElementById('searchType')
 min_term_freq = document.getElementById('min_term_freq')
 max_query_terms = document.getElementById('max_query_terms')
-SpotifySave = document.getElementById('SpotifySave')
+//SpotifySave = document.getElementById('SpotifySave')
 MakePlaylist = document.getElementById('makePlaylist')
 PlaylistTypeContainer = document.getElementById('playlistTypeContainer')
 var mxmAPI_base = 'https://api.musixmatch.com/ws/1.1/'
@@ -376,14 +376,18 @@ $("#mxmTrackSearch").keyup(function(event)
 });
 
 $('#searchType').change(function() {
-  console.log('The option with value ' + $(this).val() + ' and text ' + $(this).text() + ' was selected.');
+  //console.log('The option with value ' + $(this).val() + ' and text ' + $(this).text() + ' was selected.');
   if($(this).val() == 'track')
   {
   	document.getElementById("playlistTypeContainer").style.display = "inline"
+  	min_term_freq.value = 2 
+  	max_query_terms.value = 20
   }
   if($(this).val() == 'words')
   {
   	document.getElementById("playlistTypeContainer").style.display = "none"
+  	min_term_freq.value = 8 
+  	max_query_terms.value = 8
   }
 });
 
